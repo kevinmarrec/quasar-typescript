@@ -1,0 +1,41 @@
+{
+  "env": {
+    "test": {
+      "presets": [    [
+        "@babel/preset-env", {
+          "modules": "commonjs",
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+      ]
+    }
+  },
+  "presets": [
+    [
+      "@babel/preset-env", {
+        "modules": false,
+        "loose": false,
+        "useBuiltIns": "usage"
+      }
+    ],
+    [
+      "@babel/preset-stage-2", {
+        "modules": false,
+        "loose": false,
+        "useBuiltIns": true,
+        "decoratorsLegacy": true
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime", {
+        "polyfill": false,
+        "regenerator": false
+      }
+    ]
+  ],
+  "comments": false
+}

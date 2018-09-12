@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+		"target": "es5",
+	  "module": "esnext",
+		"strict": true,
+		"importHelpers": true,
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"experimentalDecorators": true,
+		"noImplicitAny": false,
+	  "moduleResolution": "node",
+	  "lib": [
+			"es2015",
+			"dom"
+		],
+		"baseUrl": ".",
+	  "paths": {
+			"~/*": ["./*"],
+		  "@/*": ["src/*"]
+		},
+		"types": [
+			"node",
+			"jest"
+		]
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.vue",
+		"test/**/*.ts",
+		"test/**/*.vue"
+	],
+	"exclude": [
+		"node_modules",
+		"**/__tests__/**/*.ts"
+	]
+}
