@@ -34,7 +34,7 @@ A starter kit to build powerful and amazing native-looking apps, thanks to the Q
 
 ## Built-in Tools 🔨
 
-- [TSlint](https://github.com/palantir/tslint) Javascript Linter configured with the [Standard](https://github.com/standard/standard) JavaScript Code Style
+- [TSlint](https://github.com/palantir/tslint) TypeScript Linter configured with the [Standard](https://github.com/standard/standard) JavaScript Code Style
 - Testing Suite using [Jest](https://github.com/facebook/jest)  (See `Testing` section)
 - Configurable CI Pipeline using [CircleCI](https://circleci.com/) &  [Codecov](https://codecov.io)  (See `CI Pipeline` section)
 
@@ -90,8 +90,8 @@ By default, SPA and SSR apps are respectively served on ports `4000` and `3000`
 
 You can override the port using an environment variable :
 ```bash
-$ PORT=3000 yarn serve # Serve your SPA
-$ PORT=4000 yarn serve:ssr # Serve your SSR + PWA
+$ PORT=3210 yarn serve # Serve your SPA on port 3210
+$ PORT=3210 yarn serve:ssr # Serve your SSR + PWA on port 3210
 ```
 
 ## Deploy with Now.sh
