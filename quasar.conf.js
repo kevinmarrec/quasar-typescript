@@ -12,7 +12,8 @@ const extendTypescriptToWebpack = (config) => {
       .use('typescript')
         .loader('ts-loader')
         .options({
-          appendTsSuffixTo: [/\.vue$/]
+          appendTsSuffixTo: [/\.vue$/],
+          onlyCompileBundledFiles: true
         })
 }
 
