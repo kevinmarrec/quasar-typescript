@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator'
-import { Mixin } from '@/plugins/i18n'
+import { Mixin as i18nMixin } from '@/plugins/i18n'
 
 @Component
-export default class MainLayout extends Mixins(Mixin) {}
+export default class MainLayout extends Mixins(i18nMixin) {}
 </script>

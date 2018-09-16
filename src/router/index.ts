@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouterMode } from 'vue-router'
+import { PositionResult } from 'vue-router/types/router'
 
 import routes from '@/router/routes'
 
@@ -11,7 +12,7 @@ Vue.use(VueRouter)
 
 export default function (/* { store, ssrContext } */) {
   const Router = new VueRouter({
-    scrollBehavior: () => { Promise.resolve({ y: 0 }) },
+    scrollBehavior: () => ({ y: 0 } as PositionResult),
     routes,
 
     // Leave these as is and change from quasar.conf.js instead!

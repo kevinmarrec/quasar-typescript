@@ -6,7 +6,7 @@
 		"esModuleInterop": true,
 		"sourceMap": true,
 		"experimentalDecorators": true,
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 	  "moduleResolution": "node",
 	  "lib": [
 			"es2015",

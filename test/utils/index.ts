@@ -1,16 +1,17 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, mount, Wrapper } from '@vue/test-utils'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import Quasar, { Cookies } from 'quasar'
-import Vue, { ComponentOptions } from 'vue'
+import Vue, { ComponentOptions, VueConstructor } from 'vue'
+import { QuasarSsrContext, QuasarPlugin } from 'quasar/types'
 
-const mockSsrContext = () => {
+const mockSsrContext = (): QuasarSsrContext => {
   return {
     req: {
       headers: {}
     },
     res: {
-      setHeader: () => {}
+      setHeader: () => undefined
     }
   }
 }
@@ -20,23 +21,35 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 localVue.use(Quasar)
 
-export const mountQuasar = (component, { cookies, plugins, ssr }) => {
+interface MountQuasarOptions {
+  cookies?: {
+    [key: string]: any
+  },
+  plugins?: Array<QuasarPlugin>,
+  ssr?: boolean
+}
+
+export const mountQuasar = (component: VueConstructor<Vue>, options?: MountQuasarOptions): Wrapper<Vue> => {
   const app: ComponentOptions<Vue> = {}
   const store = new Vuex.Store({})
   const router = new VueRouter()
-  const ssrContext = ssr ? mockSsrContext() : null
 
-  if (cookies) {
-    const cookieStorage = ssrContext ? Cookies.parseSSR(ssrContext) : Cookies
-    Object.keys(cookies).forEach(key => {
-      cookieStorage.set(key, cookies[key])
-    })
-  }
+  if (options) {
+    const ssrContext = options.ssr ? mockSsrContext() : null
 
-  if (plugins) {
-    plugins.forEach(plugin => {
-      plugin({ app, store, Vue: localVue, ssrContext })
-    })
+    if (options.cookies) {
+      const cookieStorage = ssrContext ? Cookies.parseSSR(ssrContext) : Cookies
+      const cookies = options.cookies
+      Object.keys(cookies).forEach(key => {
+        cookieStorage.set(key, cookies[key])
+      })
+    }
+
+    if (options.plugins) {
+      options.plugins.forEach(plugin => {
+        plugin({ app, store, router, Vue: localVue, ssrContext })
+      })
+    }
   }
 
   return mount(component, {
