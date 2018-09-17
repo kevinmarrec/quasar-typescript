@@ -108,7 +108,7 @@ $ yarn deploy:ssr # Deploy your SSR + PWA on Now.sh
 `Now.sh` will install the dependencies automatically then run `$ yarn start`. Your website will be up and running on an HTTPS connection in a matter of seconds !
 
 ## References
-* **Quasar 0.17.14** : [Website](https://quasar-framework.org) | [Documentation](https://quasar-framework.org/guide) | [Github](https://github.com/quasarframework/quasar)
+* **Quasar 0.17.15** : [Website](https://quasar-framework.org) | [Documentation](https://quasar-framework.org/guide) | [Github](https://github.com/quasarframework/quasar)
 * **Vue I18n 8.1.0** : [Website](https://kazupon.github.io/vue-i18n) | [Documentation](https://kazupon.github.io/vue-i18n/guide/started.html) | [Github](https://github.com/kazupon/vue-i18n)
 
 ## License

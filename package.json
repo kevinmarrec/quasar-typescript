@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
-    "@types/node": "^10.9.4",
+    "@types/node": "^10.10.1",
     "@vue/test-utils": "^1.0.0-beta.25",
     "babel-core": "^7.0.0-bridge.0",
     "codecov": "^3.1.0",
@@ -38,7 +38,7 @@
     "now": "^11.4.4",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
-    "quasar-cli": "^0.17.17",
+    "quasar-cli": "^0.17.18",
     "strip-ansi": "=3.0.1",
     "ts-jest": "^23.1.4",
     "ts-loader": "^5.1.1",
