@@ -699,9 +699,9 @@
   version "23.3.2"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.2.tgz#07b90f6adf75d42c34230c026a2529e56c249dbb"
 
-"@types/node@^10.10.1":
-  version "10.10.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.10.1.tgz#d5c96ca246a418404914d180b7fdd625ad18eca6"
+"@types/node@^10.11.0":
+  version "10.11.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.0.tgz#ddd0d67a3b6c3810dd1a59e36675fa82de5e19ae"
 
 "@types/semver@^5.4.0":
   version "5.5.0"
@@ -5293,9 +5293,9 @@ normalize-url@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
 
-now@^11.4.5:
-  version "11.4.5"
-  resolved "https://registry.yarnpkg.com/now/-/now-11.4.5.tgz#bf32c6b04f9be9ab510bdc226d18c9b4a21c7b72"
+now@^11.4.6:
+  version "11.4.6"
+  resolved "https://registry.yarnpkg.com/now/-/now-11.4.6.tgz#611729c3de4c1108be72f9f9a4b3851dece29380"
 
 npm-bundled@^1.0.1:
   version "1.0.5"
@@ -7461,9 +7461,9 @@ tryer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
 
-ts-jest@^23.10.0:
-  version "23.10.0"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.0.tgz#1b1ce1d795791dedf0229b7577b35eaed8565bbd"
+ts-jest@^23.10.1:
+  version "23.10.1"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.1.tgz#ad0196f7b81f08888897004d9ed870c1a901511a"
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
@@ -7474,9 +7474,9 @@ ts-jest@^23.10.0:
     semver "5.x"
     yargs-parser "10.x"
 
-ts-loader@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-5.1.1.tgz#361eeae3cc3c6f63d2e9f421dba90c4b14659aa6"
+ts-loader@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-5.2.0.tgz#755844640420faefafd32707bd08def49ebd12b3"
   dependencies:
     chalk "^2.3.0"
     enhanced-resolve "^4.0.0"
@@ -7847,9 +7847,9 @@ vue-loader@15.4.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-property-decorator@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-7.0.0.tgz#46f53dd741eb86c3af091bb0492400c450eebf19"
+vue-property-decorator@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-7.1.1.tgz#0b1eefde50a7451e911ad44b91258010ffc08d01"
   dependencies:
     vue-class-component "^6.2.0"
 
