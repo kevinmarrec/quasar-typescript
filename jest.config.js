@@ -39,7 +39,7 @@ module.exports = {
   },
   transform: {
     '.*\\.vue$': '<rootDir>/node_modules/vue-jest',
-    '.*\\.tsx?$': '<rootDir>/node_modules/ts-jest'
+    '.*\\.ts$': '<rootDir>/node_modules/ts-jest'
   },
   snapshotSerializers: [
     '<rootDir>/node_modules/jest-serializer-vue'
