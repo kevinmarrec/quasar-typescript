@@ -1,11 +1,28 @@
+// TODO: ESLINT and Code Standards for Quasar
 const fs = require('fs')
 const Handlebars = require('handlebars')
+const decode = require('ent/decode')
+const _ = require('lodash')
 const mkdirp = require('mkdirp')
-const outputDir = './'
+
 
 // Load Quasar
 const Quasar = require('quasar-framework/dist/umd/quasar.mat.umd.js')
 
+// Base output Directory for template generation output
+const outputDir = './types/'
+
+// Prop Types Mapping for TS
+const AttribTypeMap = new Map([
+    [String, 'string;'],
+    [Boolean, 'boolean;'],
+    [Number, 'number;'],
+    [Array, 'Array\<any\>;'],
+    [Object, '{ property: any; }'],
+    [Function, 'any;'],
+    [RegExp, 'any;'],
+    [Date, 'Date;']
+])
 
 /**
  * Details
@@ -112,58 +129,190 @@ class QTypes {
      * @param data Data to write
      */
     writeDefinitionFile(qKey, qClassName, data) {
-        fs.writeFileSync(`${outputDir}${qKey}/${qClassName}.d.ts`, data)
+        fs.writeFileSync(`${outputDir}${qKey}/${qClassName}.d.ts`, decode(data))
     }
 
     /**
-     * Needs work!
+     * Get the TS Type from the Map
+     * @param type
+     * @returns {any}
+     */
+    getTypeFromMap(type) {
+        const v = AttribTypeMap.get(type)
+        if (!AttribTypeMap.has(type)) {
+            console.error('AttribTypeMap.get', v, type)
+            throw new Error('AttribTypeMap.get - Needs an appropriate type mapping')
+        }
+        else {
+            return AttribTypeMap.get(type)
+        }
+    }
+
+    /**
+     * Lookup component attributes and map them to a TS definition
+     * TODO: Simplify
+     * @param qCmp
+     * @param qClassKey
+     * @param data
+     */
+    attribTypeMapLookup(qCmp, qClassKey, data) {
+        data[qClassKey] = {}
+        let cmpAttrib = qCmp[qClassKey]
+
+        // If it's an array of mixins
+        if (Array.isArray(cmpAttrib) && qClassKey === 'mixins') {
+            cmpAttrib.forEach((mixin) => {
+                // first mixin get all keys
+                if (typeof mixin === 'object') {
+                    Object.keys(mixin).forEach((mixinKey) => {
+                        if (typeof data[qClassKey][mixinKey] === 'undefined') data[qClassKey][mixinKey] = {}
+                        if (typeof mixin[mixinKey] === 'object') {
+                            Object.keys(mixin[mixinKey]).forEach((attib) => {
+                                data[qClassKey][mixinKey][attib] = 'any;'
+                            })
+                        }
+
+                    })
+                }
+            })
+        }
+        // If it's just a function
+        else if (typeof cmpAttrib === 'function') {
+            if (qClassKey === 'data') {
+                // qCmp.value = 1
+                data[qClassKey] = {
+                    key: 'any;'
+                }
+            } else {
+                data[qClassKey] = 'any;'
+            }
+        }
+        // If it's most likely an object
+        else if (typeof cmpAttrib === 'object') {
+            Object.entries(cmpAttrib).map((entry) => {
+                let yoo = qCmp
+                let current = entry[1]
+                let name = entry[0]
+
+                // Check if this key is private
+                if (!this.isPrivate(name)) {
+                    // If this key is a function or object
+                    if (typeof current === 'function' || typeof current === 'object') {
+                        // If this key value has a property of type, map it to the dictionary
+                        if (typeof current.type !== 'undefined') {
+                            // Make sure we have a function to send to getTypeFromMap
+                            if (typeof current.type === 'function') {
+                                data[qClassKey][name] = this.getTypeFromMap(current.type)
+                            } else if (Array.isArray(current.type)) {
+                                let types = '('
+                                current.type.forEach((type) => {
+                                    types += `${this.getTypeFromMap(type)} | `
+                                })
+                                data[qClassKey][name] = types + ' any;)'
+                            } else {
+                                console.error(current.type)
+                                throw new Error('Declared Type is not Handdled!')
+                            }
+                        } else {
+                            // Has no type set to any
+                            data[qClassKey][name] = 'any;'
+                        }
+                        // Handle top level types in object
+                    } else if (typeof current === 'string' || typeof current === 'boolean') {
+                        data[qClassKey][name] = this.getTypeFromMap(current.constructor)
+                    } else {
+                        throw new Error(`Cannot map!!! ${typeof current}`)
+                    }
+
+
+                }
+            })
+        } else {
+            throw new Error('Something went wrong...')
+        }
+        console.log(data[qClassKey])
+    }
+
+    /**
+     * Needs work! Take a Quasar Class and maps it's fields to the
+     * apppropriate map. ie: AttribTypeMap for props
      * TODO: Better mapping of fields
      * @param qKey
      * @param qClassName
      * @param qClassKey
      * @returns {*}
      */
-    massageVueToTypeDefinition(qKey, qClassName, qClassKey) {
-        let QCmp = Quasar[qKey][qClassName]
-        let attribVal = QCmp[qClassKey]
+    massageVueToTypeDefinitionTemplate(qKey, qClass) {
+        let QCmp = qClass
+        console.log(`#################${QCmp.name}#################`)
+        // Mark attributes as trouble
+        let isTrouble = false
 
-        if (qClassKey === 'name') {
-            return attribVal
-        }
-        if (typeof attribVal == "object") {
-            return JSON.parse(JSON.stringify(attribVal))
-        }
-        if (typeof attribVal === 'string') {
-            return 'string;'
-        }
+        // Placeholder for returning to cache
+        let data = {}
 
-        if (typeof attribVal === 'function') {
-            return '(val: any) => void;'
+        // NAME
+        if (!_.isUndefined(QCmp.name)) {
+            data.name = QCmp.name
         }
 
-        return 'any;'
-    }
+        let keyList = [
+            'mounted',
+            'inject',
+            'provide',
+            'mixins',
+            'props',
+            'directives',
+            'watch',
+            'computed',
+            'data',
+            'methods',
+            'mounted',
+            'created'
+        ].forEach((qKey) => {
+            if (!_.isUndefined(QCmp[qKey])) {
+                console.log(`${QCmp.name}.${qKey}`)
+                this.attribTypeMapLookup(QCmp, qKey, data)
+            }
+        })
 
-    /**
-     * Maps
-     * @param qClassName
-     * @param qKey
-     */
-    buildQTypeClassesCache(qKey, qClassName) {
-        if (typeof this.cache[qKey][qClassName] === 'undefined'){
-            this.cache[qKey][qClassName] = { name: qClassName, fixtures: { height: 2, opened: true }  }
-        }
 
-
-        Object.keys(Quasar[qKey][qClassName])
-            .filter(qClassKey => {
-                return !this.isPrivate(qClassKey)
+        // Checking for missing attribs in the namespace for development purposes
+        // All known attributes in this namespace are filtered and checked
+        let filtered = Object.keys(QCmp).filter((key, indx, arr) => {
+            let first = [
+                'value',
+                'mounted',
+                'inject',
+                'provide',
+                'beforeCreate',
+                'beforeMount',
+                'beforeDestroy',
+                'name',
+                'mixins',
+                'props',
+                'directives',
+                'watch',
+                'computed',
+                'data',
+                'methods',
+                'beforeDestroy',
+                'render',
+                'mounted',
+                'created',
+                'modelToggle'
+            ].filter((known) => {
+                return known === key || this.isPrivate(key)
             })
-            .forEach(qClassKey => {
-                this.cache[qKey][qClassName][qClassKey] = this.massageVueToTypeDefinition(qKey, qClassName, qClassKey)
-            })
+            return first.length === 0
+        })
 
+        if (filtered.length !== 0) {
+            console.log(filtered)
+            throw new Error('Attrib not found, add it to the list!!')
+        }
 
+        return data
     }
 
     /**
@@ -201,7 +350,11 @@ class QTypes {
             })
             .forEach((qKey) => {
                 // Generate Types Cache for each of the found Classes
-                Object.keys(Quasar[qKey]).map(qClassName => this.buildQTypeClassesCache(qKey, qClassName))
+                Object.entries(Quasar[qKey])
+                    .forEach(qClassEntry => {
+                        this.cache[qKey][qClassEntry[0]] = this.massageVueToTypeDefinitionTemplate(qKey, qClassEntry[1])
+                        this.cache[qKey][qClassEntry[0]].fixtures = {height: 2, opened: true}
+                    })
             })
 
         this.compileCache()
