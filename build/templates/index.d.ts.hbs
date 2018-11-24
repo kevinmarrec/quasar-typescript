@@ -1,21 +1,39 @@
-import { Quasar } from "./quasar";
+declare module 'quasar' {
+import { PluginObject } from 'vue'
 
-export default Quasar;
+export const Cookies: any
 
-export as namespace Quasar;
+// Components
+{{#each components}}
+export const {{this}}: any
+{{/each}}
+// End Components
 
-export {
-    SomeExport
-} from "./quasar";
+export const Quasar: PluginObject<{}>
+export default Quasar
+}
 
-export {
-    SomeComponent
-} from "./components";
+declare module 'quasar/types' {
+import Vue, { VueConstructor, ComponentOptions } from 'vue'
+import VueRouter from 'vue-router';
+import { Store } from 'vuex';
 
-export {
-    SomePlugin
-} from "./plugin";
+export interface QuasarSsrContext {
+req: {
+headers: Object
+},
+res: {
+setHeader(name: string, value: string): void
+}
+}
 
-export {
-    Some Mixin
-} from "./mixins";
+export interface QuasarPluginParams {
+app: ComponentOptions<Vue>,
+  Vue: VueConstructor<Vue>,
+  store: Store<{}>
+  router: VueRouter,
+  ssrContext: QuasarSsrContext | null | undefined
+  }
+
+  export type QuasarPlugin = (params: QuasarPluginParams) => void
+  }
